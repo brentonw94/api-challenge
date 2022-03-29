@@ -20,7 +20,7 @@ export default {
             return sortedOrders;
         },
     },
-    // Further mapping/custom logic per field added here
+    // Further mapping/custom logic per field can be added here
     Order: {
         carrierService: ({ carrierService }: MappedOrders) => carrierService,
         orderClientRef: ({ orderClientRef }: MappedOrders) => orderClientRef,
