@@ -1,14 +1,27 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
+import csv from 'csvtojson';
+import path from 'path';
 
+type MappedOrders = {
+    carrierService: string;
+    orderClientRef: string;
+    addressName: string;
+    addressEmail: string;
+    skuBarCode: string;
+    [key: string]: string;
+}
 
+const headers = [
+    "carrierService",
+    "orderClientRef",
+    "addressName",
+    "addressEmail",
+    "skuBarCode", "skuQuantity"
+];
 export class OrderList extends RESTDataSource {
-    constructor() {
-        super();
+    async getList(): Promise<MappedOrders[]> {
+        return await csv({
+            headers,
+        }).fromFile(path.join(`${__dirname}/data/order_lines.csv`));
     }
-
-    // GET
-    async getList() {
-        // TODO excel sheet mapping
-    }
-
 }

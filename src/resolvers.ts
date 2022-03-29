@@ -1,7 +1,23 @@
+import { Order, OrderList } from "./data-sources";
+
+type RetrieveOrdersInput = {
+    sortBy: string
+}
+
+type DataSource = {
+    orderList: OrderList
+}
+
 export default {
     Query: {
-      retrieveOrdersBy: () => true,
-      quantitySoldBy: () => 0,
+        retrieveOrders: async (_: any, { sortBy }: RetrieveOrdersInput, { dataSources: { orderList } }: { dataSources: DataSource }) => {
+            const orders = await orderList.getList();
+            console.log(orders)
+            if (!sortBy) return orders;
+            const upperSortBy = sortBy.toUpperCase();
+            const sortedOrders = orders.sort((a, b) => (a[upperSortBy] > b[upperSortBy]) ? 1 : ((b[upperSortBy] > a[upperSortBy]) ? -1 : 0))
+            return sortedOrders;
+        },
     },
     Order: {
         carrierService: () => '',
@@ -10,4 +26,4 @@ export default {
         addressEmail: () => '',
         skuBarCode: () => '',
     }
-  };
+};
