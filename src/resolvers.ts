@@ -1,9 +1,9 @@
 import { sortBy } from "lodash";
 import { MappedOrders, OrderList } from "./data-sources";
 
-type RetrieveOrdersInput = {
+export type RetrieveOrdersInput = {
     sortBy: string
-    isDescending: boolean;
+    isAscending: boolean;
 }
 
 type DataSource = {
@@ -12,14 +12,15 @@ type DataSource = {
 
 export default {
     Query: {
-        retrieveOrders: async (_: any, { sortBy: sortString, isDescending }: RetrieveOrdersInput, { dataSources: { orderList } }: { dataSources: DataSource }) => {
+        retrieveOrders: async (_: any, { sortBy: sortString, isAscending }: RetrieveOrdersInput, { dataSources: { orderList } }: { dataSources: DataSource }) => {
             const orders = await orderList.getList();
             if (!sortBy) return orders;
             const sortedOrders = sortBy(orders, sortString);
-            if (isDescending) sortedOrders.reverse();
+            if (isAscending) sortedOrders.reverse();
             return sortedOrders;
         },
     },
+    // Further mapping/custom logic per field added here
     Order: {
         carrierService: ({ carrierService }: MappedOrders) => carrierService,
         orderClientRef: ({ orderClientRef }: MappedOrders) => orderClientRef,
