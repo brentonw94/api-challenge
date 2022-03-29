@@ -8,11 +8,11 @@ export const server = new ApolloServer({
     typeDefs,
     dataSources: () => {
         return {
-          orderList: new OrderList()
+            orderList: new OrderList()
         };
-      },
+    },
 });
 
-server.listen({port: 3000}).then(({ url }) => {
+server.listen({ port: 3000 }).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
 });
