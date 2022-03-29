@@ -1,9 +1,15 @@
-import { sortBy } from "lodash";
+import { sortBy as sort } from "lodash";
 import { MappedOrders, OrderList } from "./data-sources";
 
 export type RetrieveOrdersInput = {
     sortBy: string
     isAscending: boolean;
+    filterBy: FilterOptions
+}
+
+type FilterOptions = {
+    field: string;
+    values: string[];
 }
 
 type DataSource = {
@@ -12,10 +18,11 @@ type DataSource = {
 
 export default {
     Query: {
-        retrieveOrders: async (_: any, { sortBy: sortString, isAscending }: RetrieveOrdersInput, { dataSources: { orderList } }: { dataSources: DataSource }) => {
+        retrieveOrders: async (_: any, { sortBy, isAscending, filterBy }: RetrieveOrdersInput, { dataSources: { orderList } }: { dataSources: DataSource }) => {
             const orders = await orderList.getList();
-            if (!sortBy) return orders;
-            const sortedOrders = sortBy(orders, sortString);
+            const filteredOrders = orders.filter(order => !filterBy || !order[filterBy.field] || filterBy.values.includes(order[filterBy.field]))
+            if (!sortBy) return filteredOrders;
+            const sortedOrders = sort(filteredOrders, sortBy);
             if (isAscending) sortedOrders.reverse();
             return sortedOrders;
         },
