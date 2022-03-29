@@ -18,9 +18,15 @@ type DataSource = {
 
 export default {
     Query: {
-        retrieveOrders: async (_: any, { sortBy, isAscending, filterBy }: RetrieveOrdersInput, { dataSources: { orderList } }: { dataSources: DataSource }) => {
+        retrieveOrders: async (
+            _: any, 
+            { sortBy, isAscending, filterBy }: RetrieveOrdersInput, 
+            { dataSources: { orderList } }: { dataSources: DataSource }
+        ) => {
             const orders = await orderList.getList();
-            const filteredOrders = orders.filter(order => !filterBy || !order[filterBy.field] || filterBy.values.includes(order[filterBy.field]))
+            const filteredOrders = orders.filter(order => 
+                !filterBy || !order[filterBy.field] || filterBy.values.includes(order[filterBy.field])
+            );
             if (!sortBy) return filteredOrders;
             const sortedOrders = sort(filteredOrders, sortBy);
             if (isAscending) sortedOrders.reverse();
