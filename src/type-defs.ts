@@ -2,7 +2,7 @@ const { gql } = require('apollo-server');
 
 export default gql`
   type Query {
-    retrieveOrders(sortBy: SortingField, isAscending: Boolean): [Order]
+    retrieveOrders(sortBy: SortingField, isDescending: Boolean): [Order]
   }
 
   enum SortingField {

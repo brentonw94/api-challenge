@@ -6,11 +6,9 @@ import typeDefs from './type-defs';
 export const server = new ApolloServer({
     resolvers,
     typeDefs,
-    dataSources: () => {
-        return {
-            orderList: new OrderList()
-        };
-    },
+    dataSources: () => ({
+        orderList: new OrderList()
+    })
 });
 
 server.listen({ port: 3000 }).then(({ url }) => {
